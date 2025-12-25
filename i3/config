@@ -53,6 +53,16 @@ floating_modifier $mod
 # or left-clicking anywhere into the window while holding the floating modifier.
 tiling_drag modifier titlebar
 
+gaps outer 4
+for_window [all] title_window_icon on
+for_window [all] title_window_icon padding 5px
+for_window [class="."] border pixel 5
+default_border pixel 5
+title_align center
+gaps inner 10px
+gaps top 5px
+
+
 # start a terminal
 # bindsym $mod+Return exec i3-sensible-terminal
 bindsym $mod+Return exec kitty
