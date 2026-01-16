@@ -22,7 +22,7 @@ font pango:monospace 8
 # Start XDG autostart .desktop files using dex. See also
 # https://wiki.archlinux.org/index.php/XDG_Autostart
 exec --no-startup-id dex --autostart --environment i3
-exec --no-startup-id feh --bg-scale ~/Downloads/1354384.png
+exec --no-startup-id feh --bg-scale ~/Downloads/1189484.jpg
 exec --no-startup-id picom --experimental-backends
 exec --no-startup-id compton -b -f
 exec --no-startup-id $HOME/.config/polybar/polybar.sh
