@@ -1,14 +1,11 @@
 # ~~~~~~~~~~~~~~~~~~~PATH~~~~~~~~~~~~~~~~~~~~~~
 
-setopt extended_glob null_glob
-
 path=(
-  $PATH                     # Keep existing PATH entries
   $HOME/bin
-  $HOME/.local/bin/
-  /usr/bin/
-  /usr/local/
+  $HOME/.local/bin
+  $path# Keep existing PATH entries
 )
+
 # Remove duplicate entries
 typeset -U path
 export PATH
@@ -26,11 +23,12 @@ export BROWSER="firefox"
 
 # Directories
 
-export DOTFILES="$HOME/Documents/dotfiles/"
-export SCRIPTS="$HOME/projects/scripts/"
+export DOTFILES="$HOME/Documents/dotfiles"
+export SCRIPTS="$HOME/projects/scripts"
 
 # Minor tweeks
 setopt autocd beep extendedglob nomatch notify
+eval "$(zoxide init zsh)"
 
 # ~~~~~~~~~~~~~~~~~~~History~~~~~~~~~~~~~~~~~~~~~~
 
@@ -42,6 +40,14 @@ SAVEHIST=1000
 setopt HIST_IGNORE_SPACE  # Don't save when prefixed with space
 setopt HIST_IGNORE_DUPS   # Don't save duplicate line
 setopt SHARE_HISTORY      # Share History across sessions
+
+# ~~~~~~~~~~~~~~~~~~~Alias~~~~~~~~~~~~~~~~~~~~~~
+
+alias v=nvim
+alias cd=z
+
+alias scripts='cd $SCRIPTS'
+alias dot='cd $DOTFILES'
 
 
 # The following lines were added by compinstall
@@ -73,20 +79,6 @@ function tat {
 
 source ~/.privaterc
 
-alias v="nvim"
-
-# eval "$(starship init zsh)"
-eval "$(zoxide init zsh)"
-
-source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
-
-
-
-alias cd="z"
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
-
 
 alias ls='eza --icons --git --group-directories-first --color=always --long --header --time-style=long-iso'
 alias lsf='eza --icons --git --long --header --group --group-directories-first --time-style=relative --color=always'
@@ -97,7 +89,6 @@ alias lt='eza --icons --tree --level=3'
 alias l='eza --icons'
 
 
-alias c='clear'
 alias catp='bat --paging=always'
 alias less='bat'
 alias grep='grep --color=auto'
@@ -130,7 +121,7 @@ alias tk='tmux kill-session -t'
 
 
 alias reload='source ~/.zshrc'
-alias path='echo -e ${PATH//:/\\n}'
+# alias path='echo -e ${PATH//:/\\n}'
 alias mkdirp='mkdir -pv'
 
 alias factorio='wine ~/Downloads/Factorio-SteamRIP.com/Factorio/bin/x64/factorio.exe'
