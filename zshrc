@@ -29,6 +29,20 @@ export BROWSER="firefox"
 export DOTFILES="$HOME/Documents/dotfiles/"
 export SCRIPTS="$HOME/projects/scripts/"
 
+# Minor tweeks
+setopt autocd beep extendedglob nomatch notify
+
+# ~~~~~~~~~~~~~~~~~~~History~~~~~~~~~~~~~~~~~~~~~~
+
+HISTFILE=~/.histfile
+HISTSIZE=1000
+SAVEHIST=1000
+
+# History behaviour
+setopt HIST_IGNORE_SPACE  # Don't save when prefixed with space
+setopt HIST_IGNORE_DUPS   # Don't save duplicate line
+setopt SHARE_HISTORY      # Share History across sessions
+
 
 # The following lines were added by compinstall
 
@@ -40,10 +54,6 @@ autoload -Uz compinit
 compinit
 
 # Lines configured by zsh-newuser-install
-HISTFILE=~/.histfile
-HISTSIZE=1000
-SAVEHIST=1000
-setopt autocd beep extendedglob nomatch notify
 
 export KEYTIMEOUT=1
 # End of lines configured by zsh-newuser-install
