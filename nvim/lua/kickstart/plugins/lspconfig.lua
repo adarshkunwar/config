@@ -13,7 +13,17 @@ return {
 
       -- `neodev` configures Lua LSP for your Neovim config, runtime and plugins
       -- used for completion, annotations and signatures of Neovim apis
-      { 'folke/neodev.nvim', opts = {} },
+      {
+        'folke/neodev.nvim',
+        opts = {
+          library = {
+            enabled = true,
+            runtime = true,
+            types = true,
+            plugins = true,
+          },
+        },
+      },
     },
     config = function()
       -- Brief aside: **What is LSP?**
@@ -170,16 +180,26 @@ return {
         --
 
         lua_ls = {
-          -- cmd = {...},
-          -- filetypes = { ...},
-          -- capabilities = {},
           settings = {
             Lua = {
+              runtime = {
+                version = 'LuaJIT',
+              },
+              diagnostics = {
+                globals = { 'vim' },
+              },
+              workspace = {
+                library = {
+                  vim.env.VIMRUNTIME,
+                },
+                checkThirdParty = false,
+              },
               completion = {
                 callSnippet = 'Replace',
               },
-              -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-              -- diagnostics = { disable = { 'missing-fields' } },
+              telemetry = {
+                enable = false,
+              },
             },
           },
         },
