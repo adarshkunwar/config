@@ -42,6 +42,7 @@ source ~/.privaterc
 
 export EDITOR="nvim"
 export VISUAL="nvim"
+alias v="nvim"
 
 eval "$(starship init zsh)"
 eval "$(zoxide init zsh)"
