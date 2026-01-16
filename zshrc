@@ -1,9 +1,18 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-#   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-# fi
+# ~~~~~~~~~~~~~~~~~~~PATH~~~~~~~~~~~~~~~~~~~~~~
+
+setopt extended_glob null_glob
+
+path=(
+  $PATH                     # Keep existing PATH entries
+  $HOME/bin
+  $HOME/.local/bin/
+  /usr/bin/
+  /usr/local/
+)
+# Remove duplicate entries
+typeset -U path
+export PATH
+
 
 
 # The following lines were added by compinstall
@@ -14,14 +23,13 @@ zstyle :compinstall filename '/home/adarsh/.zshrc'
 
 autoload -Uz compinit
 compinit
-# End of lines added by compinstall
+
 # Lines configured by zsh-newuser-install
 HISTFILE=~/.histfile
 HISTSIZE=1000
 SAVEHIST=1000
 setopt autocd beep extendedglob nomatch notify
 
-bindkey -v
 export KEYTIMEOUT=1
 # End of lines configured by zsh-newuser-install
 #
@@ -44,13 +52,11 @@ export EDITOR="nvim"
 export VISUAL="nvim"
 alias v="nvim"
 
-eval "$(starship init zsh)"
+# eval "$(starship init zsh)"
 eval "$(zoxide init zsh)"
 
 source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 
 alias cd="z"
