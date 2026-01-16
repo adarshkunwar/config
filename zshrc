@@ -38,7 +38,7 @@ function tat {
   fi
 }
 
-export GITHUB_TOKEN=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
+source ~/.privaterc
 
 export EDITOR="nvim"
 export VISUAL="nvim"
