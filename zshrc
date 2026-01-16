@@ -13,6 +13,21 @@ path=(
 typeset -U path
 export PATH
 
+# ~~~~~~~~~~~~~~~~~~~Environemnt Variables~~~~~~~~~~~~~~~~~~~~~~
+
+# Set to vim mode
+set -o vi
+
+export EDITOR="nvim"
+export VISUAL="nvim"
+export TERM="tmux-256color"
+
+export BROWSER="firefox"
+
+# Directories
+
+export DOTFILES="$HOME/Documents/dotfiles/"
+export SCRIPTS="$HOME/projects/scripts/"
 
 
 # The following lines were added by compinstall
@@ -48,8 +63,6 @@ function tat {
 
 source ~/.privaterc
 
-export EDITOR="nvim"
-export VISUAL="nvim"
 alias v="nvim"
 
 # eval "$(starship init zsh)"
