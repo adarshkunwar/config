@@ -41,6 +41,12 @@ setopt HIST_IGNORE_SPACE  # Don't save when prefixed with space
 setopt HIST_IGNORE_DUPS   # Don't save duplicate line
 setopt SHARE_HISTORY      # Share History across sessions
 
+# ~~~~~~~~~~~~~~~~~~~Prompt~~~~~~~~~~~~~~~~~~~~~~
+
+fpath+=($HOME/.zsh/pure)
+autoload -U promptinit; promptinit
+prompt pure
+
 # ~~~~~~~~~~~~~~~~~~~Alias~~~~~~~~~~~~~~~~~~~~~~
 
 alias v=nvim
@@ -73,8 +79,6 @@ alias tk='tmux kill-session -t'
 
 alias reload='source ~/.zshrc'
 alias mkdirp='mkdir -pv'
-
-
 
 # ~~~~~~~~~~~~~~~~~~~Sourcing~~~~~~~~~~~~~~~~~~~~~~
 
