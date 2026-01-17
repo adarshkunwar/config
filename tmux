@@ -15,12 +15,25 @@ set -as terminal-features ",*:RGB"        # Enables RGB support for all terminal
 set -g default-terminal ${TERM}           # Tells tmux to use the same terminal as my shell
 set -g status-interval 5                  # Updates status bar every 5 second
 
-set-option -g status-keys emacs
-set -g escape-time 10
+# ~~~~~~~~~~~~~~~~~~~~~ Prefix ~~~~~~~~~~~~~~~~~~~
 
+# Change the PREFIX to Ctrl + T
 unbind C-b
 set -g prefix C-t
-bind C-a send-prefix
+bind C-a send-prefix                      # Send the prefix to the internal command by appending C-a. 
+
+# Use PREFIX + r to reload the config
+unbind r
+bind r source-file ~/.tmux.conf \; display "Config reloaded!"
+
+# ~~~~~~~~~~~~~~~~~~~~~ Keybinds ~~~~~~~~~~~~~~~~~~~
+
+# -r means that the bind can repeat without entering the prefix again
+# -n means taht the bind doesnt use the prefix
+
+# Allow holding Ctrl when using prefix prefix + p/n for switching windows
+bind C-p previous-window
+bind C-n next-window
 
 unbind-key -T copy-mode-vi v
 bind-key -T copy-mode-vi v \
@@ -32,7 +45,6 @@ bind-key -T copy-mode-vi y\
 bind-key -T copy-mode-vi MouseDragEnd1Pane \
   send-keys -X copy-pipe-and-cancel "pbcopy"
 
-bind r source-file ~/.tmux.conf \; display "Config reloaded!"
 
 bind c new-window -c '#{pane_current_path}'
 bind '\' split-window -h -c '#{pane_current_path}'
