@@ -47,33 +47,16 @@ bind -r M-j resize-pane -D 5
 bind -r M-k resize-pane -U 5
 bind -r M-l resize-pane -R 5
 
-unbind-key -T copy-mode-vi v
-bind-key -T copy-mode-vi v \
-  send-keys -X begin-selection
-bind-key -T copy-mode-vi 'C-v' \
-  send-keys -X rectangle-toggle
-bind-key -T copy-mode-vi y\
-  send-keys -X copy-pipe-and-cancel "pbcopy"
-bind-key -T copy-mode-vi MouseDragEnd1Pane \
-  send-keys -X copy-pipe-and-cancel "pbcopy"
+# Switch between most recently used window and session
+bind Space last-window
+bind b switch-client -l
 
+# New pane path
+bind | split-window -h -c "#{pane_current_path}"
+bind - split-window -v -c "#{pane_current_path}"
 
+# The new window follows the current path
 bind c new-window -c '#{pane_current_path}'
-bind '\' split-window -h -c '#{pane_current_path}'
-bind '-' split-window -v -c '#{pane_current_path}'
-bind d break-pane -d
 
-
-set-option -g status-justify left
-set-option -g status-left '#[bg=colour72] #[bg=colour237] #[bg=colour236] #[bg=colour235]#[fg=colour185] #S #[bg=colour236] '
-set-option -g status-left-length 16
-set-option -g status-bg colour237
-set-option -g status-right '#[bg=colour236] #[bg=colour235]#[fg=colour185] %a %R #[bg=colour236]#[fg=colour3] #[bg=colour237] #[bg=colour72] #[]'
-set-option -g status-interval 60
-
-set-option -g pane-active-border-style fg=colour246
-set-option -g pane-border-style fg=colour238
-
-set-window-option -g window-status-format '#[bg=colour238]#[fg=colour107] #I #[bg=colour239]#[fg=colour110] #[bg=colour240]#W#[bg=colour239]#[fg=colour195]#F#[bg=colour238] '
-set-window-option -g window-status-current-format '#[bg=colour236]#[fg=colour215] #I #[bg=colour235]#[fg=colour167] #[bg=colour234]#W#[bg=colour235]#[fg=colour195]#F#[bg=colour236] '
-
+# To copy in copy mode with y
+bind-key -T copy-mode-vi y send-keys -X copy-pipe-and-cancel "xclip"
