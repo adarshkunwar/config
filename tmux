@@ -31,9 +31,21 @@ bind r source-file ~/.tmux.conf \; display "Config reloaded!"
 # -r means that the bind can repeat without entering the prefix again
 # -n means taht the bind doesnt use the prefix
 
-# Allow holding Ctrl when using prefix prefix + p/n for switching windows
-bind C-p previous-window
-bind C-n next-window
+# Move around panes like in vim
+bind -r h select-pane -L
+bind -r j select-pane -D
+bind -r k select-pane -U
+bind -r l select-pane -R
+
+# Cycle through the windows using C-h and C-l
+bind -r C-h select-window -t :-
+bind -r C-l select-window -t :+
+
+# Resize panes more easily
+bind -r M-h resize-pane -L 5
+bind -r M-j resize-pane -D 5
+bind -r M-k resize-pane -U 5
+bind -r M-l resize-pane -R 5
 
 unbind-key -T copy-mode-vi v
 bind-key -T copy-mode-vi v \
