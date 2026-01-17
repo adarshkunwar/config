@@ -1,11 +1,21 @@
-set -g mouse on
-set -g history-limit 102400
-set -g base-index 1
-setw -g pane-base-index 1
-set -g renumber-window on
+#~~~~~~~~~~~~~~~Environment config~~~~~~~~~~~~~~~~~
+setw -g mode-keys vi                      # Use vim_keybinding in copy menu
+set -g history-limit 10000                # Key 10000 lines as tmux history limit
+set -g base-index 1                       # Start windows numbering at 1 instead of 0
+setw -g pane-base-index 1                 # Start Pane numbering at 1 instead of 0
+set -g allow-rename on                    # Allow program to rename windows automatically
+set -g renumber-windows on                # Automatically renumber the windows when one is destroyed
+set -g mouse on                           # Enable mouse support (click, hover, scroll)
+set -g set-titles on                      # Set terminal window title to match tmux session/window
+setw -g monitor-activity on               # Highlight windows with activity in the status bar
+set -g focus-events on                    # Send focus events to program (useful for vim/editor reload)
+set -g detach-on-destroy off              # Don't detach sessions when switching the window (switch to other one instead)
+set -s escape-time 0                      # Remove delay when pressing Escape (Important for vim)
+set -as terminal-features ",*:RGB"        # Enables RGB support for all terminal
+set -g default-terminal ${TERM}           # Tells tmux to use the same terminal as my shell
+set -g status-interval 5                  # Updates status bar every 5 second
 
 set-option -g status-keys emacs
-setw -g mode-keys vi
 set -g escape-time 10
 
 unbind C-b
