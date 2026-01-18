@@ -38,6 +38,11 @@ link_config() {
     return
   fi
 
+  if [[ -L "$target" && "$(readlink "$target")" == "$source" ]]; then
+    log "$name already linked, skipping"
+    return
+  fi
+
   backup_if_exist "$target"
   ln -s "$source" "$target"
   log "Linked $name"
