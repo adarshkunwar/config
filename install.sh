@@ -2,7 +2,7 @@
 set -euo pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/config"
-CONFIG_DIR="$HOME/Documents/dotfiles/test"
+CONFIG_DIR="$HOME/.config"
 
 log() {
   printf "\033[1;32m[dotfiles]\033[0m %s\n" "$1"
