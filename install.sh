@@ -2,7 +2,7 @@
 set -euo pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/config"
-CONFIG_DIR="$HOME/.config"
+CONFIG_DIR="$HOME/Documents/dotfiles/test"
 
 log() {
   printf "\033[1;32m[dotfiles]\033[0m %s\n" "$1"
@@ -12,9 +12,19 @@ backup_if_exist() {
   local target="$1"
 
   if [[ -e "$target" || -L "$target" ]]; then
-    local backup="${target}.bak.$(date +%Y%m%d_%H%M%S)"
-    mv "$target" "$backup"
-    log "Backed up $target -> $backup"
+
+    log "A config found at $target "
+    read -p "Do you want create a backup? [y/N]" should_backup
+
+    if [[ $should_backup == "y" ]]; then
+      local backup="${target}.bak.$(date +%Y%m%d_%H%M%S)"
+      mv "$target" "$backup"
+      log "Backed up $target -> $backup"
+    else
+      log "You need to remove the config at $target first"
+      return 1
+    fi
+
   fi
 }
 
