@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/config"
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_DIR="$ROOT_DIR/config"
 CONFIG_DIR="$HOME/.config"
 
 log() {
@@ -12,9 +13,9 @@ backup_if_exist() {
   local target="$1"
 
   if [[ -e "$target" || -L "$target" ]]; then
-
-    log "A config found at $target "
-    read -p "Do you want create a backup? [y/N]" should_backup
+    log "A config found at $target"
+    read -rp "Do you want to create a backup? [y/N] " should_backup
+    should_backup=${should_backup,,}
 
     if [[ $should_backup == "y" ]]; then
       local backup="${target}.bak.$(date +%Y%m%d_%H%M%S)"
@@ -24,17 +25,23 @@ backup_if_exist() {
       log "You need to remove the config at $target first"
       return 1
     fi
-
   fi
 }
 
 link_config() {
   local name="$1"
-  local source="$DOTFILES_DIR/$name"
-  local target="$CONFIG_DIR/$name"
+  local folder="$2"
+
+  if [[ "$2" == "config" ]]; then
+    local source="$DOTFILES_DIR/$name"
+    local target="$CONFIG_DIR/$name"
+  else
+    local source="$ROOT_DIR/$name"
+    local target="$HOME/.$name"
+  fi
 
   if [[ ! -e "$source" ]]; then
-    log "Skipping $name (not found in dot files)"
+    log "Skipping $name (not found in dotfiles)"
     return
   fi
 
@@ -48,14 +55,31 @@ link_config() {
   log "Linked $name"
 }
 
-log "Starting dotfiles installation"
+starter() {
+  local -n arr="$1"
+  local folder="$2"
+
+  for file in "${arr[@]}"; do
+    link_config "$file" "$folder"
+  done
+}
+
+# Core configs
+config_folder=(
+  i3
+  nvim
+  kitty
+  polybar
+)
+
+root_file=(
+  zshrc
+  tmux.conf
+)
 
 mkdir -p "$CONFIG_DIR"
 
-# Core configs
-link_config i3
-link_config nvim
-link_config kitty
-link_config polybar
+starter config_folder "config"
+starter root_file "root"
 
 log "Dotfiles installation complete"
