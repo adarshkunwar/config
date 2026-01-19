@@ -1,0 +1,45 @@
+#!/bin/bash
+
+set -euo pipefail
+
+COPY=false
+JSON=false
+
+# Parse flags
+while getopts "jc" opt; do
+  case "$opt" in
+    j) JSON=true;;
+    c) COPY=true;;
+    *)
+      echo "Usage :$0 [-j] [-c]"
+      exit 1
+      ;;
+  esac
+done
+
+read -rp "Enter the Base64 string: " INPUT
+
+DECODED=$(echo "$INPUT" | base64 --decode 2>/dev/null) || {
+  echo "Invalid base64 input"
+  exit 1
+}
+
+if $JSON; then
+  if command -v jq >/dev/null 2>&1; then
+    DECODED=$(echo "$DECODED" | jq .)
+  else
+    echo "jq is required for -j (JSON) option"
+    exit 1
+  fi
+fi
+
+echo "$DECODED"
+
+if $COPY; then
+  if command -v xclip >/dev/null 2>&1; then
+    echo "$DECODED" | xclip -selection clipboard 
+  elif command -v wl-copy >/dev/null 2>&1; then
+    echo "$DECODED" | wl-copy
+  fi
+fi
+

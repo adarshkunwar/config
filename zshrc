@@ -3,6 +3,7 @@
 path=(
   $HOME/bin
   $HOME/.local/bin
+  $HOME/.scripts
   $path                 # Keep existing PATH entries
 )
 

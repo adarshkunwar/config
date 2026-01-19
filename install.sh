@@ -4,6 +4,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DOTFILES_DIR="$ROOT_DIR/config"
 CONFIG_DIR="$HOME/.config"
+SCRIPTS_DIR="$HOME/.scripts"
 
 log() {
   printf "\033[1;32m[dotfiles]\033[0m %s\n" "$1"
@@ -27,6 +28,10 @@ backup_if_exist() {
     fi
   fi
 }
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# CONFIG 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 link_config() {
   local name="$1"
@@ -72,6 +77,7 @@ config_folder=(
   polybar
 )
 
+# Shell config
 root_file=(
   zshrc
   tmux.conf
@@ -81,5 +87,24 @@ mkdir -p "$CONFIG_DIR"
 
 starter config_folder "config"
 starter root_file "root"
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# SCRIPTS
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+mkdir -p "$SCRIPTS_DIR"
+
+for script in "$ROOT_DIR/scripts/"*; do
+  name=$(basename "$script")
+  target="$SCRIPTS_DIR/$name"
+
+  if [[ -e "$target" ]]; then
+    log "Script $name already exists in $SCRIPTS_DIR, skipping"
+    continue
+  fi
+
+  ln -s "$script" "$target"
+  log "Linked script $name -> $target"
+done
 
 log "Dotfiles installation complete"
