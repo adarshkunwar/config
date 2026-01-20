@@ -58,6 +58,13 @@ require('lazy').setup {
 
   -- Coding related
   'numToStr/Comment.nvim',
+  {
+    'ThePrimeagen/harpoon',
+    branch = "harpoon2",
+    config = function()
+      require("config.harpoon")
+    end
+  },
 
   -- File explorer
   {
