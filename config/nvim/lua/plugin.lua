@@ -36,22 +36,16 @@ require('lazy').setup {
   -- Dev icon
   'nvim-tree/nvim-web-devicons',
 
-  -- File explorer
-  'stevearc/oil.nvim',
-
   -- Coding related
   'numToStr/Comment.nvim',
 
+  -- File explorer
+  {
+    'stevearc/oil.nvim',
+    config=function()
+      require("config.oil")
+    end
+  }
+
 }
-
-
-------------------------------------------
---- Simple Config
-------------------------------------------
-
-require("oil").setup({
-  view_options = {
-    show_hidden = true,
-  },
-})
 
