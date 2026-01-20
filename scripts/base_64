@@ -5,19 +5,28 @@ set -euo pipefail
 COPY=false
 JSON=false
 
+usage() {
+  echo "Usage :$0 [-j] [-c] [base64_string]"
+  exit 1
+}
+
 # Parse flags
 while getopts "jc" opt; do
   case "$opt" in
-    j) JSON=true;;
-    c) COPY=true;;
-    *)
-      echo "Usage :$0 [-j] [-c]"
-      exit 1
-      ;;
+  j) JSON=true ;;
+  c) COPY=true ;;
+  *) usage ;;
   esac
 done
 
-read -rp "Enter the Base64 string: " INPUT
+shift $((OPTIND - 1))
+
+# Input handling
+if [[ $# -gt 0 ]]; then
+  INPUT="$1"
+else
+  read -rp "Enter the Base64 string: " INPUT
+fi
 
 DECODED=$(echo "$INPUT" | base64 --decode 2>/dev/null) || {
   echo "Invalid base64 input"
@@ -33,13 +42,13 @@ if $JSON; then
   fi
 fi
 
+echo ""
 echo "$DECODED"
 
 if $COPY; then
   if command -v xclip >/dev/null 2>&1; then
-    echo "$DECODED" | xclip -selection clipboard 
+    echo "$DECODED" | xclip -selection clipboard
   elif command -v wl-copy >/dev/null 2>&1; then
     echo "$DECODED" | wl-copy
   fi
 fi
-
