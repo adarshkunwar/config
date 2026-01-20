@@ -45,7 +45,13 @@ require('lazy').setup {
     config=function()
       require("config.oil")
     end
-  }
+  },
+
+  -- Git 
+  {
+    'lewis6991/gitsigns.nvim',
+    opts = require("config.gitsigns"),  -- load opts from a file
+  },
 
 }
 
