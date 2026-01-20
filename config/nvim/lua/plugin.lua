@@ -28,6 +28,26 @@ require('lazy').setup {
 
   -- LSP (Language Server Protocol)
   'neovim/nvim-lspconfig',
+  { 
+    'nvim-telescope/telescope.nvim',
+    event = 'VimEnter',
+    branch = '0.1.x',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      {
+        'nvim-telescope/telescope-fzf-native.nvim',
+        build = 'make',
+        cond = function()
+          return vim.fn.executable 'make' == 1
+        end,
+      },
+      { 'nvim-telescope/telescope-ui-select.nvim' },
+      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
+    },
+    config = function()
+      require("config.telescope")
+    end,
+  },
 
   -- Formatting and linting
   'jose-elias-alvarez/null-ls.nvim',
@@ -42,15 +62,13 @@ require('lazy').setup {
   -- File explorer
   {
     'stevearc/oil.nvim',
-    config=function()
-      require("config.oil")
-    end
+    opts = require("config.oil")
   },
 
   -- Git 
   {
     'lewis6991/gitsigns.nvim',
-    opts = require("config.gitsigns"),  -- load opts from a file
+    opts = require("config.gitsigns"),
   },
 
 }

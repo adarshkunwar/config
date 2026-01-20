@@ -1,5 +1,4 @@
-
-require("oil").setup({
+return {
   view_options = {
     show_hidden = true,
   },
@@ -12,5 +11,5 @@ require("oil").setup({
     -- "size",
     -- "mtime",
   },
-})
+}
 
