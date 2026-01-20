@@ -23,6 +23,7 @@
 ]]
 
 require 'options'
+require 'plugin'
 require 'keymaps'
-require 'lazy-bootstrap'
-require 'lazy-plugins'
+-- require 'lazy-bootstrap'
+-- require 'lazy-plugins'
