@@ -1,5 +1,6 @@
-------------------------------------------
+----------------------------------------
 --- Bootstrap lazy.nvim
+---
 ------------------------------------------
 
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -27,7 +28,36 @@ require('lazy').setup {
   'junegunn/goyo.vim',
 
   -- LSP (Language Server Protocol)
-  'neovim/nvim-lspconfig',
+  {
+    'neovim/nvim-lspconfig',
+    dependencies = {
+      -- Automatically install LSPs and related tools to stdpath for Neovim
+      { 'williamboman/mason.nvim', config = true }, -- NOTE: Must be loaded before dependants
+      'williamboman/mason-lspconfig.nvim',
+      'WhoIsSethDaniel/mason-tool-installer.nvim',
+
+      -- Useful status updates for LSP.
+      -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
+      { 'j-hui/fidget.nvim', opts = {} },
+
+      -- `neodev` configures Lua LSP for your Neovim config, runtime and plugins
+      -- used for completion, annotations and signatures of Neovim apis
+      {
+        'folke/neodev.nvim',
+        opts = {
+          library = {
+            enabled = true,
+            runtime = true,
+            types = true,
+            plugins = true,
+          },
+        },
+      },
+    },
+    config=function()
+      require("config.lspconfig")
+    end
+  },
   { 
     'nvim-telescope/telescope.nvim',
     event = 'VimEnter',
@@ -36,8 +66,7 @@ require('lazy').setup {
       'nvim-lua/plenary.nvim',
       {
         'nvim-telescope/telescope-fzf-native.nvim',
-        build = 'make',
-        cond = function()
+        build = 'make', cond = function()
           return vim.fn.executable 'make' == 1
         end,
       },
@@ -48,6 +77,7 @@ require('lazy').setup {
       require("config.telescope")
     end,
   },
+
 
   -- Formatting and linting
   'jose-elias-alvarez/null-ls.nvim',
@@ -65,6 +95,44 @@ require('lazy').setup {
       require("config.harpoon")
     end
   },
+  {
+    'hrsh7th/nvim-cmp', -- for snippets this is completion 
+    event = 'InsertEnter',
+    dependencies = {
+      {
+        'L3MON4D3/LuaSnip',
+        build = (function()
+          if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
+            return
+          end
+          return 'make install_jsregexp'
+        end)(),
+        dependencies = {
+          {
+            'rafamadriz/friendly-snippets',
+            config = function()
+              require('luasnip.loaders.from_vscode').lazy_load()
+            end,
+          },
+        },
+      },
+      'saadparwaiz1/cmp_luasnip',
+      'hrsh7th/cmp-nvim-lsp',
+      'hrsh7th/cmp-path',
+    },
+    config = function()
+      require("config.cmp")
+    end
+  },
+  {
+    'nvim-treesitter/nvim-treesitter',
+    build = ':TSUpdate',
+    opts = require("config.treesitter"),
+    config=function ()
+      require('nvim-treesitter.install').prefer_git = true
+    end
+  },
+  
 
   -- File explorer
   {
