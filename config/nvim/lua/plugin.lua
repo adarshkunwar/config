@@ -82,6 +82,13 @@ require('lazy').setup {
   -- Formatting and linting
   'jose-elias-alvarez/null-ls.nvim',
   'MunifTanjim/prettier.nvim',
+  { -- Add indentation guides even on blank lines
+    'lukas-reineke/indent-blankline.nvim',
+    -- Enable `lukas-reineke/indent-blankline.nvim`
+    -- See `:help ibl`
+    main = 'ibl',
+    opts = {},
+  },
   { -- Autoformat
     'stevearc/conform.nvim',
     lazy = false,
