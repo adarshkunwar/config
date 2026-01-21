@@ -82,9 +82,33 @@ require('lazy').setup {
   -- Formatting and linting
   'jose-elias-alvarez/null-ls.nvim',
   'MunifTanjim/prettier.nvim',
+  { -- Autoformat
+    'stevearc/conform.nvim',
+    lazy = false,
+    keys = {
+      {
+        '<leader>f',
+        function()
+          require('conform').format { async = true, lsp_fallback = true }
+        end,
+        mode = '',
+        desc = '[F]ormat buffer',
+      },
+    },
+    opt = require("config.conform")
+  },
 
   -- Dev icon
   'nvim-tree/nvim-web-devicons',
+  {
+    'ellisonleao/gruvbox.nvim',
+    priority = 1000, -- Make sure to load this before all the other start plugins.
+    init = function()
+      vim.o.background = 'dark'
+      vim.cmd.hi 'Comment gui=none'
+      vim.cmd.colorscheme 'gruvbox'
+    end,
+  },
 
   -- Coding related
   'numToStr/Comment.nvim',
