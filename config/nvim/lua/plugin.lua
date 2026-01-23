@@ -82,6 +82,10 @@ require('lazy').setup {
   -- Formatting and linting
   'jose-elias-alvarez/null-ls.nvim',
   'MunifTanjim/prettier.nvim',
+  {
+    'mfussenegger/nvim-lint',
+    event = { 'BufReadPre', 'BufNewFile' },
+  },
   { -- Add indentation guides even on blank lines
     'lukas-reineke/indent-blankline.nvim',
     -- Enable `lukas-reineke/indent-blankline.nvim`
@@ -119,6 +123,19 @@ require('lazy').setup {
 
   -- Coding related
   'numToStr/Comment.nvim',
+  -- Opencode ai
+  {
+    'kevinhwang91/nvim-ufo',
+    dependencies= {
+      {
+        'kevinhwang91/promise-async'
+      }
+    },
+    config = function()
+      require("config.ufo")
+    end
+
+  },
   {
     'ThePrimeagen/harpoon',
     branch = "harpoon2",
@@ -163,7 +180,7 @@ require('lazy').setup {
       require('nvim-treesitter.install').prefer_git = true
     end
   },
-  
+
 
   -- File explorer
   {
