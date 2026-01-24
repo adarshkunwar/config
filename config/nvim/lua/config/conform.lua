@@ -1,8 +1,5 @@
-
-
-return{
-
-  { 
+return {
+  {
     'stevearc/conform.nvim',
     lazy = false,
     keys = {
@@ -11,17 +8,13 @@ return{
         function()
           require('conform').format { async = true, lsp_fallback = true }
         end,
-        mode = '',
+        mode = 'n',
         desc = '[F]ormat buffer',
       },
     },
-    opt = {
-
+    opts = {
       notify_on_error = false,
       format_on_save = function(bufnr)
-        -- Disable "format_on_save lsp_fallback" for languages that don't
-        -- have a well standardized coding style. You can add additional
-        -- languages here or re-enable it for the disabled ones.
         local disable_filetypes = { c = true, cpp = true }
         return {
           timeout_ms = 500,
@@ -30,13 +23,25 @@ return{
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
-        -- You can use a sub-list to tell conform to run *until* a formatter
-        -- is found.
-        -- javascript = { { "prettierd", "prettier" } },
-      }
-    }
+        javascript = { 'prettierd', 'prettier' },
+        typescript = { 'prettierd', 'prettier' },
+        javascriptreact = { 'prettierd', 'prettier' },
+        typescriptreact = { 'prettierd', 'prettier' },
+      },
+      prettier = {
+        extra_args = {
+          '--single-quote',
+          'true',
+          '--trailing-comma',
+          'all',
+          '--print-width',
+          '60',
+          '--bracket-same-line',
+          'false',
+          '--prose-wrap',
+          'always',
+        },
+      },
+    },
   },
 }
