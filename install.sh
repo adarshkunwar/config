@@ -30,7 +30,7 @@ backup_if_exist() {
 }
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# CONFIG 
+# CONFIG
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 link_config() {
@@ -75,6 +75,7 @@ config_folder=(
   nvim
   kitty
   polybar
+  rofi
 )
 
 # Shell config
