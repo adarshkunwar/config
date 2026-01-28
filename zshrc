@@ -20,7 +20,8 @@ export EDITOR="nvim"
 export VISUAL="nvim"
 export TERM="tmux-256color"
 
-export BROWSER="firefox"
+# dont need this right now
+# export BROWSER="firefox"
 
 # Directories
 
