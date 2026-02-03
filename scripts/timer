@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+
+# Usage:
+# timer [-s] <minutes>
+# -s : silent/background mode (no terminal output, just notifications)
+
+silent=0
+
+# Parse flags
+while getopts ":s" opt; do
+    case $opt in
+    s)
+        silent=1
+        ;;
+    *)
+        echo "Usage: $0 [-s] <minutes>"
+        exit 1
+        ;;
+    esac
+done
+shift $((OPTIND - 1))
+
+# Check for minutes argument
+if [ -z "$1" ] || ! [[ "$1" =~ ^[0-9]+$ ]]; then
+    echo "Usage: $0 [-s] <minutes>"
+    exit 1
+fi
+
+minutes=$1
+seconds=$((minutes * 60))
+
+notify() {
+    printf "\a"
+    notify-send "⏰ Time's UP!!!"
+    if command -v paplay >/dev/null; then
+        paplay /usr/share/sounds/freedesktop/stereo/complete.oga 2>/dev/null || true
+    elif command -v canberra-gtk-play >/dev/null; then
+        canberra-gtk-play -i complete 2>/dev/null || true
+    fi
+}
+
+# ---------- Silent / Background Mode ----------
+if [ "$silent" -eq 1 ]; then
+    (
+        while ((seconds > 0)); do
+            ((seconds--))
+            sleep 1
+        done
+        notify
+    ) &
+    echo "Timer set for $minutes minute(s) in background."
+    exit 0
+fi
+
+# ---------- Foreground Mode with Pause ----------
+paused=0
+echo "Timer: $minutes minute(s)... (Press 'P' to pause/resume)"
+
+# Non-blocking keypress detection
+stty -echo -icanon time 0 min 0
+
+while ((seconds > 0)); do
+    # Check for keypress
+    key=$(dd bs=1 count=1 2>/dev/null)
+    if [[ $key == "P" || $key == "p" ]]; then
+        ((paused = 1 - paused))
+    fi
+
+    if ((paused == 0)); then
+        printf "\r%02d:%02d remaining " $((seconds / 60)) $((seconds % 60))
+        ((seconds--))
+    else
+        printf "\rPaused at %02d:%02d     " $((seconds / 60)) $((seconds % 60))
+    fi
+
+    sleep 1
+done
+
+stty sane
+printf "\r00:00 remaining\n"
+notify
