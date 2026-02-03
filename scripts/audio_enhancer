@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if [ "$#" -lt 2 ]; then
+  echo "Usage: $0 <input.webm> <output.webm> [gain_db]"
+  exit 1
+fi
+
+INPUT="$1"
+OUTPUT="$2"
+GAIN_DB="${3:-6}"
+
+ffmpeg -y \
+  -i "$INPUT" \
+  -map 0:v \
+  -map 0:a \
+  -c:v copy \
+  -c:a libopus -b:a 128k \
+  -af "volume=${GAIN_DB}dB" \
+  "$OUTPUT"
+
+notify-send \
+  "FFmpeg Finished" \
+  "Audio boost complete:\n$(basename "$OUTPUT")"
