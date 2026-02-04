@@ -51,6 +51,8 @@ exec --no-startup-id picom --experimental-backends
 exec --no-startup-id compton -b -f
 exec --no-startup-id $HOME/.config/polybar/polybar.sh
 
+exec_always --no-startup-id setxkbmap -layout us -variant altgr-intl
+
 # The combination of xss-lock, nm-applet and pactl is a popular choice, so
 # they are included here as an example. Modify as you see fit.
 
