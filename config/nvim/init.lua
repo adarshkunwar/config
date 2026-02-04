@@ -25,5 +25,8 @@
 require 'options'
 require 'plugin'
 require 'keymaps'
+
+vim.g.conform_format_on_save = true
+
 -- require 'lazy-bootstrap'
 -- require 'lazy-plugins'
