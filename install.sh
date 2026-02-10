@@ -76,6 +76,8 @@ config_folder=(
   kitty
   polybar
   rofi
+  dunst
+  electron
 )
 
 # Shell config

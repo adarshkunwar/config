@@ -32,6 +32,9 @@ export SCRIPTS="$HOME/projects/scripts"
 setopt autocd beep extendedglob nomatch notify
 eval "$(zoxide init zsh)"
 
+# Electron
+export ELECTRON_FLAGS="$(cat ~/.config/electron/electron-flags.conf | tr '\n' ' ')"
+
 # ~~~~~~~~~~~~~~~~~~~History~~~~~~~~~~~~~~~~~~~~~~
 
 HISTFILE=~/.histfile
@@ -81,6 +84,9 @@ alias tk='tmux kill-session -t'
 
 alias reload='source ~/.zshrc'
 alias mkdirp='mkdir -pv'
+
+alias discord="discord $ELECTRON_FLAGS"
+alias cursor="cursor $ELECTRON_FLAGS"
 
 # ~~~~~~~~~~~~~~~~~~~Sourcing~~~~~~~~~~~~~~~~~~~~~~
 
