@@ -1,0 +1,10 @@
+#!/bin/bash
+
+LOGS=./text.txt
+FILE=Babel.m4b
+
+mpc clear
+mpc add "$FILE"
+mpc play
+
+echo "Hi" >>$LOGS
