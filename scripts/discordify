@@ -1,0 +1,125 @@
+#!/bin/bash
+# discordify.sh - Split videos into Discord-friendly chunks (under 10MB)
+
+if [ -z "$1" ]; then
+  INPUT=$(find . -type f \( -iname "*.mp4" -o -iname "*.mov" -o -iname "*.mkv" -o -iname "*.avi" -o -iname "*.webm" \) | fzf --prompt="Select video: " --preview="ffprobe -v quiet -show_entries format=duration:format=size -of default=noprint_wrappers=1 {}")
+  if [ -z "$INPUT" ]; then
+    echo "No file selected."
+    exit 1
+  fi
+else
+  INPUT="$1"
+fi
+
+TARGET_MB=9.5
+TARGET_BYTES=$(awk "BEGIN { printf \"%d\", $TARGET_MB * 1048576 }")
+MAX_BYTES=$((10 * 1024 * 1024))
+AUDIO_BITRATE=128
+CRF=28
+SCALE=720 # Scale to 720p (Discord's max inline playback resolution)
+
+if [ ! -f "$INPUT" ]; then
+  echo "File not found: $INPUT"
+  exit 1
+fi
+
+echo "🎮 discordify — preparing video for Discord"
+echo "─────────────────────────────────────────"
+echo "Analyzing video..."
+
+DURATION=$(ffprobe -v quiet -show_entries format=duration -of csv=p=0 "$INPUT")
+FILE_SIZE=$(ffprobe -v quiet -show_entries format=size -of csv=p=0 "$INPUT")
+ORIG_MB=$(awk "BEGIN { printf \"%.2f\", $FILE_SIZE / 1048576 }")
+
+echo "Duration:   ${DURATION}s"
+echo "File size:  ${ORIG_MB} MB"
+echo "Output:     720p, CRF ${CRF}, ${AUDIO_BITRATE}kbps audio"
+echo "─────────────────────────────────────────"
+
+if [ "$FILE_SIZE" -le "$TARGET_BYTES" ]; then
+  echo "✅ File is already under 10MB, no splitting needed!"
+  exit 0
+fi
+
+# First, estimate the output size after re-encoding at 720p/CRF28
+# by encoding just the first 5 seconds as a probe
+BASENAME=$(basename "$INPUT" | sed 's/\.[^.]*$//')
+EXT="mp4"
+OUTPUT_DIR="${BASENAME}_discord"
+mkdir -p "$OUTPUT_DIR"
+
+PROBE_FILE="$OUTPUT_DIR/.probe.mp4"
+echo "Running quick encode probe to estimate bitrate..."
+ffmpeg -v quiet -ss 0 -i "$INPUT" -t 5 \
+  -vf "scale=-2:${SCALE}" \
+  -c:v libx264 -crf $CRF -preset fast \
+  -c:a aac -b:a "${AUDIO_BITRATE}k" \
+  -y "$PROBE_FILE"
+
+PROBE_SIZE=$(stat -f%z "$PROBE_FILE" 2>/dev/null || stat -c%s "$PROBE_FILE")
+BYTES_PER_SEC=$(awk "BEGIN { printf \"%.2f\", $PROBE_SIZE / 5 }")
+CHUNK_DURATION=$(awk "BEGIN { printf \"%.2f\", $TARGET_BYTES / $BYTES_PER_SEC * 0.92 }")
+NUM_CHUNKS=$(awk "BEGIN { print int($DURATION / $CHUNK_DURATION) + 1 }")
+rm -f "$PROBE_FILE"
+
+echo "Estimated chunk duration: ~${CHUNK_DURATION}s"
+echo "Estimated chunks: ${NUM_CHUNKS}"
+echo "─────────────────────────────────────────"
+echo ""
+
+encode_chunk() {
+  local start=$1
+  local duration=$2
+  local output=$3
+  local extra_crf=$4 # increased CRF for retries
+
+  ffmpeg -v quiet -ss "$start" -i "$INPUT" -t "$duration" \
+    -vf "scale=-2:${SCALE}" \
+    -c:v libx264 -crf $extra_crf -preset fast \
+    -c:a aac -b:a "${AUDIO_BITRATE}k" \
+    -y "$output"
+}
+
+CHUNK=1
+START=0
+
+while awk "BEGIN { exit !($START < $DURATION) }"; do
+  OUTPUT="$OUTPUT_DIR/${BASENAME}_part_$(printf '%03d' $CHUNK).${EXT}"
+  CURRENT_CRF=$CRF
+  ATTEMPT=1
+
+  while true; do
+    if [ $ATTEMPT -eq 1 ]; then
+      printf "Chunk $CHUNK (${START}s) ... "
+    else
+      printf "  ↳ Retry $ATTEMPT (CRF $CURRENT_CRF) ... "
+    fi
+
+    encode_chunk "$START" "$CHUNK_DURATION" "$OUTPUT" "$CURRENT_CRF"
+
+    CHUNK_SIZE=$(stat -f%z "$OUTPUT" 2>/dev/null || stat -c%s "$OUTPUT")
+    CHUNK_MB=$(awk "BEGIN { printf \"%.2f\", $CHUNK_SIZE / 1048576 }")
+
+    if [ "$CHUNK_SIZE" -le "$MAX_BYTES" ]; then
+      echo "${CHUNK_MB} MB ✓"
+      break
+    else
+      echo "${CHUNK_MB} MB ⚠ over limit — retrying with higher CRF..."
+      CURRENT_CRF=$((CURRENT_CRF + 3))
+
+      if [ "$CURRENT_CRF" -gt 40 ]; then
+        echo "  ✗ Could not reduce below 10MB (CRF maxed). Keeping smallest version."
+        break
+      fi
+    fi
+
+    ATTEMPT=$((ATTEMPT + 1))
+  done
+
+  START=$(awk "BEGIN { printf \"%.2f\", $START + $CHUNK_DURATION }")
+  CHUNK=$((CHUNK + 1))
+done
+
+echo ""
+echo "─────────────────────────────────────────"
+echo "✅ Done! $((CHUNK - 1)) chunks saved to \"$OUTPUT_DIR/\""
