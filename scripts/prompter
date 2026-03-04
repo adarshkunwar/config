@@ -1,0 +1,300 @@
+#!/usr/bin/env bash
+# prompts.sh — A CLI prompt repository manager
+# Dependencies: jq, fzf, xclip
+#
+# Setup:
+#   1. Place this script anywhere, e.g. ~/bin/prompts.sh
+#   2. Set PROMPTS_FILE below (or export it in your .bashrc/.zshrc)
+#   3. chmod +x prompts.sh
+#   4. Optionally alias it: alias prompts="~/bin/prompts.sh"
+#
+# Usage:
+#   prompts search   — fuzzy search prompts, copies selected to clipboard
+#   prompts list     — list all prompts (title, category, tags)
+#   prompts add      — interactively add a new prompt
+#   prompts show ID  — print a specific prompt by ID
+#   prompts help     — show this help
+
+# ── Config ────────────────────────────────────────────────────────────────────
+PROMPTS_FILE="${PROMPTS_FILE:-$HOME/.prompts/prompt_repository.json}"
+
+# ── Helpers ───────────────────────────────────────────────────────────────────
+_check_deps() {
+  local missing=()
+  for cmd in jq fzf xclip; do
+    command -v "$cmd" &>/dev/null || missing+=("$cmd")
+  done
+  if [[ ${#missing[@]} -gt 0 ]]; then
+    echo "❌ Missing dependencies: ${missing[*]}"
+    echo "   Install with: sudo apt install ${missing[*]}"
+    exit 1
+  fi
+}
+
+_check_file() {
+  if [[ ! -f "$PROMPTS_FILE" ]] || [[ ! -s "$PROMPTS_FILE" ]]; then
+    echo "📁 No prompt file found at: $PROMPTS_FILE"
+    echo "   Creating a new one..."
+    mkdir -p "$(dirname "$PROMPTS_FILE")"
+    local today
+    today=$(date +%Y-%m-%d)
+    cat >"$PROMPTS_FILE" <<EOF
+{
+  "meta": {
+    "title": "My Prompt Repository",
+    "version": "1.0",
+    "created": "$today",
+    "last_updated": "$today",
+    "description": "A personal collection of reusable prompts."
+  },
+  "prompts": [],
+  "categories": [
+    "Productivity",
+    "Writing",
+    "Development",
+    "Creativity",
+    "HR & Hiring",
+    "Decision Making"
+  ],
+  "use_cases": ["personal", "work", "developer"]
+}
+EOF
+    echo "✅ Created: $PROMPTS_FILE"
+    echo ""
+  fi
+}
+
+_next_id() {
+  local max
+  max=$(jq '[.prompts[].id | tonumber] | if length == 0 then 0 else max end' "$PROMPTS_FILE")
+  # jq returns "null" if prompts array is empty — treat that as 0
+  [[ "$max" == "null" || -z "$max" ]] && max=0
+  printf "%03d" $((max + 1))
+}
+
+_today() {
+  date +%Y-%m-%d
+}
+
+# ── Commands ──────────────────────────────────────────────────────────────────
+
+cmd_search() {
+  _check_deps
+  _check_file
+
+  # Build fzf input: "ID | title | category | tags"
+  local selection
+  selection=$(
+    jq -r '.prompts[] |
+      "\(.id) | \(.title) | \(.category) | [\(.tags | join(", "))]"
+    ' "$PROMPTS_FILE" |
+      fzf \
+        --prompt="🔍 Search prompts > " \
+        --preview="
+          id=\$(echo {} | cut -d'|' -f1 | tr -d ' ')
+          jq -r --arg id \"\$id\" '
+            .prompts[] | select(.id == \$id) |
+            \"── \" + .title + \" ──\n\" +
+            \"Category : \" + .category + \"\n\" +
+            \"Use case : \" + .use_case + \"\n\" +
+            \"Tags     : \" + (.tags | join(\", \")) + \"\n\" +
+            (if .notes != \"\" then \"Notes    : \" + .notes + \"\n\" else \"\" end) +
+            \"\n\" + .prompt
+          ' \"$PROMPTS_FILE\"
+        " \
+        --preview-window=right:55%:wrap \
+        --height=80% \
+        --border \
+        --color=header:italic
+  )
+
+  [[ -z "$selection" ]] && echo "No selection made." && exit 0
+
+  local id
+  id=$(echo "$selection" | cut -d'|' -f1 | tr -d ' ')
+
+  local prompt_text
+  prompt_text=$(jq -r --arg id "$id" \
+    '.prompts[] | select(.id == $id) | .prompt' "$PROMPTS_FILE")
+
+  echo "$prompt_text" | xclip -selection clipboard
+  echo "✅ Copied to clipboard: $(echo "$selection" | cut -d'|' -f2 | xargs)"
+
+  # Update last_used
+  local today
+  today=$(_today)
+  local tmp
+  tmp=$(mktemp)
+  jq --arg id "$id" --arg date "$today" \
+    '(.prompts[] | select(.id == $id) | .last_used) |= $date' \
+    "$PROMPTS_FILE" >"$tmp" && mv "$tmp" "$PROMPTS_FILE"
+}
+
+cmd_list() {
+  _check_file
+  local count
+  count=$(jq '.prompts | length' "$PROMPTS_FILE")
+  if [[ "$count" -eq 0 ]]; then
+    echo ""
+    echo "  No prompts yet. Run: prompts add"
+    echo ""
+    exit 0
+  fi
+  echo ""
+  printf "%-6s %-32s %-20s %-18s %s\n" "ID" "TITLE" "CATEGORY" "USE CASE" "TAGS"
+  printf "%-6s %-32s %-20s %-18s %s\n" "------" "------------------------------" "-------------------" "----------------" "--------------------"
+  jq -r '.prompts[] |
+    [
+      .id,
+      (.title | if length > 30 then .[:29] + "…" else . end),
+      (.category | if length > 18 then .[:17] + "…" else . end),
+      (.use_case | if length > 16 then .[:15] + "…" else . end),
+      (.tags | join(", "))
+    ] | @tsv
+  ' "$PROMPTS_FILE" |
+    awk -F'\t' '{printf "%-6s %-32s %-20s %-18s %s\n", $1, $2, $3, $4, $5}'
+  echo ""
+  echo "  $count prompt(s) total  |  File: $PROMPTS_FILE"
+  echo ""
+}
+
+cmd_show() {
+  _check_file
+  local id="$1"
+  if [[ -z "$id" ]]; then
+    echo "Usage: prompts show <ID>"
+    exit 1
+  fi
+
+  local result
+  result=$(jq -r --arg id "$id" '
+    .prompts[] | select(.id == $id) |
+    "── " + .title + " ──\n" +
+    "ID       : " + .id + "\n" +
+    "Category : " + .category + "\n" +
+    "Use case : " + .use_case + "\n" +
+    "Tags     : " + (.tags | join(", ")) + "\n" +
+    "Created  : " + .created + "\n" +
+    (if .last_used != null then "Last used: " + .last_used + "\n" else "" end) +
+    (if .notes != "" then "Notes    : " + .notes + "\n" else "" end) +
+    "\n── Prompt ──\n" +
+    .prompt
+  ' "$PROMPTS_FILE")
+
+  if [[ -z "$result" ]]; then
+    echo "❌ No prompt found with ID: $id"
+    exit 1
+  fi
+
+  echo ""
+  echo "$result"
+  echo ""
+}
+
+cmd_add() {
+  _check_file
+  echo ""
+  echo "── Add a new prompt ──"
+  echo ""
+
+  read -rp "Title      : " title
+  [[ -z "$title" ]] && echo "Title is required." && exit 1
+
+  # Show existing categories as a hint
+  echo ""
+  echo "Existing categories:"
+  jq -r '.categories[]' "$PROMPTS_FILE" | awk '{print "  - " $0}'
+  echo ""
+  read -rp "Category   : " category
+  [[ -z "$category" ]] && echo "Category is required." && exit 1
+
+  echo ""
+  echo "Use cases: personal, work, developer (or combine: e.g. work, developer)"
+  read -rp "Use case   : " use_case
+  [[ -z "$use_case" ]] && use_case="personal"
+
+  echo ""
+  read -rp "Tags (comma-separated): " tags_raw
+
+  echo ""
+  echo "Enter your prompt text. Type END on a new line when done:"
+  local prompt_lines=()
+  while IFS= read -r line; do
+    [[ "$line" == "END" ]] && break
+    prompt_lines+=("$line")
+  done
+  local prompt_text
+  prompt_text=$(printf "%s\n" "${prompt_lines[@]}")
+  [[ -z "$prompt_text" ]] && echo "Prompt text is required." && exit 1
+
+  echo ""
+  read -rp "Notes (optional): " notes
+
+  # Parse tags into a JSON array
+  local tags_json
+  tags_json=$(echo "$tags_raw" | jq -Rc '[split(",")[] | ltrimstr(" ") | rtrimstr(" ") | select(length > 0)]')
+
+  local new_id
+  new_id=$(_next_id)
+  local today
+  today=$(_today)
+
+  local tmp
+  tmp=$(mktemp)
+  jq \
+    --arg id "$new_id" \
+    --arg title "$title" \
+    --arg category "$category" \
+    --arg use_case "$use_case" \
+    --argjson tags "$tags_json" \
+    --arg prompt "$prompt_text" \
+    --arg notes "$notes" \
+    --arg created "$today" \
+    '.prompts += [{
+      id: $id,
+      title: $title,
+      category: $category,
+      tags: $tags,
+      use_case: $use_case,
+      prompt: $prompt,
+      notes: $notes,
+      created: $created,
+      last_used: null
+    }]' \
+    "$PROMPTS_FILE" >"$tmp" && mv "$tmp" "$PROMPTS_FILE"
+
+  echo ""
+  echo "✅ Prompt '$title' added with ID $new_id"
+  echo ""
+}
+
+cmd_help() {
+  cat <<EOF
+
+prompts — CLI prompt repository manager
+
+Usage:
+  prompts search         Fuzzy search prompts (fzf), copies selected to clipboard
+  prompts list           List all prompts in a table
+  prompts show <ID>      Print a specific prompt by its ID
+  prompts add            Interactively add a new prompt
+  prompts help           Show this help message
+
+Config:
+  Set PROMPTS_FILE to point to your JSON file:
+    export PROMPTS_FILE=~/path/to/prompt_repository.json
+
+Dependencies:
+  jq, fzf, xclip   (install via: sudo apt install jq fzf xclip)
+
+EOF
+}
+
+# ── Entry point ───────────────────────────────────────────────────────────────
+case "${1:-help}" in
+search) cmd_search ;;
+list) cmd_list ;;
+show) cmd_show "$2" ;;
+add) cmd_add ;;
+help | *) cmd_help ;;
+esac
