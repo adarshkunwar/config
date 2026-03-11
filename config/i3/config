@@ -1,6 +1,5 @@
-
 # -----------------------------
-# Gruvbox palette
+# Theme and Colors 
 # -----------------------------
 
 set $bg        #282828
@@ -12,19 +11,50 @@ set $blue      #83a598
 set $purple    #d3869b
 set $aqua      #8ec07c
 set $orange    #fe8019
+
+# -----------------------------
+# Fonts and Appearance
+# -----------------------------
+
 font pango:monospace 8
 
+set $border_size        5
+set $gaps_inner         10
+set $gaps_outer         5
+set $gaps_top           5
+
+gaps inner      $gaps_inner
+gaps outer      $gaps_outer
+gaps top        $gaps_top
+
+default_border pixel $border_size
+for_window [class="."] border pixel $border_size
+for_window [all] title_window_icon on
+for_window [all] title_window_icon padding 5px
+title_align center
+
 # -----------------------------
-# Borders
+# Window Colors 
 # -----------------------------
 
-client.focused          $bg $blue $blue $fg
-client.focused_inactive $bg $bg $bg $fg
-client.unfocused        $bg $bg $bg $fg
-client.urgent           $bg $red $red $fg
-client.placeholder      $bg $bg $bg $fg
-client.focused_title    $fg $bg $blue $fg
+# indicator             $border $background     $text   $indicator
+client.focused          $bg     $blue           $blue   $fg
+client.focused_inactive $bg     $bg             $bg     $fg
+client.unfocused        $bg     $bg             $bg     $fg
+client.urgent           $bg     $red            $red    $fg
+client.placeholder      $bg     $bg             $bg     $fg
+client.focused_title    $fg     $bg             $blue   $fg
 
+
+# -----------------------------
+# Applications 
+# -----------------------------
+
+set $terminal kitty
+set $launcher rofi -show drun
+set $screenshot flameshot gui
+set $browser firefox
+set $locker i3lock -c 000000
 
 # -----------------------------
 # Base Config 
