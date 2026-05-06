@@ -1,0 +1,138 @@
+* {
+  font-family: "JetBrainsMono Nerd Font", monospace;
+  font-size: 12px;
+  border: none;
+  border-radius: 0;
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+}
+
+window#waybar {
+  background: transparent;
+  color: #cccccc;
+}
+
+.modules-center,
+.modules-right {
+  background: #111111;
+  border: 1px solid #242424;
+  border-radius: 50px;
+  padding: 0 8px;
+}
+
+#workspaces {
+  padding : 0
+}
+
+/* Base module pill */
+#clock,
+#battery,
+#network,
+#pulseaudio,
+#backlight,
+#custom-dunst,
+#custom-powermenu,
+#custom-mpd-toggle,
+#custom-mpd-info,
+#window {
+  color: #666666;
+  padding: 4px 8px;
+  border-radius: 50px;
+}
+
+/* Workspaces */
+#workspaces button {
+  color: #444444;
+  background: transparent;
+  padding: 2px 2px;
+  min-width: 24px;
+  min-height: 24px;
+  /* margin: 8px 2px; */
+  border-radius: 50px;
+  border: none;
+  box-shadow: none;
+  text-shadow: none;
+  font-family: "JetBrainsMono Nerd Font", monospace;
+  font-size: 12px;
+  transition: none;
+}
+
+#workspaces button.active {
+  color: #f0a020;
+  background: #1c1400;
+  border: 1px solid #3a2800;
+}
+
+#workspaces button:hover {
+  background: #1a1a1a;
+  color: #888888;
+  box-shadow: none;
+}
+
+/* Window title */
+#window {
+  color: #555555;
+  font-size: 11px;
+}
+
+#window > * {
+  padding: 0 4px;
+}
+
+/* Accent modules */
+#clock {
+  color: #f0a020;
+}
+
+#custom-powermenu {
+  color: #f0a020;
+  font-size: 14px;
+  padding: 4px 10px;
+}
+
+#custom-powermenu:hover {
+  color: #ff5555;
+}
+
+#custom-mpd-toggle {
+  color: #f0a020;
+  padding: 4px 6px;
+}
+
+#custom-mpd-info {
+  color: #888888;
+  font-size: 11px;
+}
+
+/* Battery states */
+#battery.charging {
+  color: #f0a020;
+}
+
+#battery.warning:not(.charging) {
+  color: #fba922;
+}
+
+#battery.critical:not(.charging) {
+  color: #ff5555;
+}
+
+/* Dunst paused indicator */
+#custom-dunst.paused {
+  color: #ff5555;
+}
+
+/* Hover effect for interactive modules */
+#pulseaudio:hover,
+#backlight:hover,
+#network:hover,
+#battery:hover,
+#custom-dunst:hover {
+  color: #f0a020;
+}
+
+/* Separator between pill groups */
+#custom-powermenu {
+  margin-right: 2px;
+}

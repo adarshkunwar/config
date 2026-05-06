@@ -1,0 +1,53 @@
+{
+  "layer": "top",
+  "position": "top",
+  "height": 34,
+
+  "modules-left": ["hyprland/workspaces", "mpd"],
+  "modules-right": ["custom/dunst", "pulseaudio", "backlight", "network", "battery", "clock"],
+
+  "modules-center": [],
+
+  "custom/dunst": {
+    "exec": "~/.config/polybar/dunstctl.sh",
+    "interval": 1,
+    "on-click": "dunstctl set-paused toggle"
+  },
+
+  "mpd": {
+    "format": "{stateIcon} {elapsedTime}/{totalTime} {artist} - {title}",
+    "format-disconnected": "MPD offline",
+    "interval": 2
+  },
+
+  "pulseaudio": {
+    "format": "{icon} {volume}%",
+    "format-muted": " muted",
+    "format-icons": ["", "", ""]
+  },
+
+  "backlight": {
+    "device": "intel_backlight",
+    "format": "{icon} {percent}%",
+    "format-icons": ["", "", "", ""]
+  },
+
+  "network": {
+    "format-wifi": " {essid}",
+    "format-ethernet": " {ipaddr}",
+    "format-disconnected": " not connected",
+    "interval": 3
+  },
+
+  "battery": {
+    "format": "{icon} {capacity}%",
+    "format-charging": "{icon} {capacity}%",
+    "format-icons": ["", "", "", "", ""],
+    "interval": 5
+  },
+
+  "clock": {
+    "format": " {:%A, %d %B %Y %H:%M:%S}",
+    "interval": 1
+  }
+}
