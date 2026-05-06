@@ -1,0 +1,12 @@
+#!/bin/bash
+
+INPUT=$1
+OPTION=${2:-personal}
+
+root=$(echo "$INPUT" | cut -d ":" -f 2)
+
+if [[ "$OPTION" == "personal" ]]; then
+  echo "git@github-personal:$root"
+else
+  echo "git@github-work:$root"
+fi
