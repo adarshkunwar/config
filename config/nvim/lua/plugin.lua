@@ -47,30 +47,30 @@ require('lazy').setup {
     opts = {},
   },
 
-  require("config.cmp"),
+  require 'config.cmp',
 
-  require("config.lspconfig"),
+  require 'config.lspconfig',
 
-  require("config.telescope"),
-  
-  require("config.conform"),
+  require 'config.telescope',
 
-  require("config.gruvbox"),
+  require 'config.conform',
 
-  require("config.ufo"),
+  require 'config.gruvbox',
 
-  require("config.harpoon"),
+  require 'config.ufo',
 
-  require("config.gitsigns"),
+  require 'config.harpoon',
 
-  require("config.lint"),
+  require 'config.gitsigns',
 
-  require("config.oil"),
+  require 'config.lint',
 
-  require("config.treesitter"),
+  require 'config.oil',
 
-  require("config.autopairs"),
+  require 'config.treesitter',
 
-  require("config.snacks")
+  require 'config.autopairs',
+
+  require 'config.snacks',
 }
 
