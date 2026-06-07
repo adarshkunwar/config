@@ -57,6 +57,7 @@ return {
         typescript = { 'prettierd', 'prettier' },
         javascriptreact = { 'prettierd', 'prettier' },
         typescriptreact = { 'prettierd', 'prettier' },
+        c = { 'clang-format' },
       },
 
       prettier = {

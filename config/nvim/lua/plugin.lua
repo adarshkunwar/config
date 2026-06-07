@@ -74,3 +74,4 @@ require('lazy').setup {
   require 'config.snacks',
 }
 
+require('custom.theme').apply()
