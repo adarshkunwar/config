@@ -1,0 +1,11 @@
+#!/bin/bash
+
+RES=$(xdpyinfo | awk '/dimensions/{print $2}')
+OUT="$HOME/Videos/recording-$(date +%F_%H-%M-%S).mkv"
+
+ffmpeg \
+-f pipewire -i 0 \
+-f pulse -i default \
+-c:v libx264 -preset veryfast -crf 23 \
+-c:a aac -b:a 192k \
+~/Videos/recording-$(date +%F_%H-%M-%S).mkv
