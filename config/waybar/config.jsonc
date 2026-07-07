@@ -3,7 +3,7 @@
   "position": "top",
   "height": 34,
 
-  "modules-left": ["hyprland/workspaces", "mpd"],
+  "modules-left": ["hyprland/workspaces", "mpd", "custom/anki"],
   "modules-right": ["custom/dunst", "pulseaudio", "backlight", "network", "battery", "clock"],
 
   "modules-center": [],
@@ -49,5 +49,11 @@
   "clock": {
     "format": " {:%A, %d %B %Y %H:%M:%S}",
     "interval": 1
+  },
+
+  "custom/anki": {
+    "exec": "~/.config/waybar/scripts/anki.sh",
+    "return-type": "json",
+    "interval": 60
   }
 }

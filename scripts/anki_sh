@@ -1,0 +1,42 @@
+#!/bin/bash
+
+DB=$(find "$HOME/.local/share/Anki2" -name collection.anki2 | head -n 1)
+
+if [ ! -f "$DB" ]; then
+    echo "Anki database not found."
+    exit 1
+fi
+
+cards=$(sqlite3 "$DB" "SELECT COUNT(*) FROM cards;")
+notes=$(sqlite3 "$DB" "SELECT COUNT(*) FROM notes;")
+
+today=$(sqlite3 "$DB" "
+SELECT CAST((strftime('%s','now') - crt) / 86400 AS INTEGER)
+FROM col;
+")
+
+due_reviews=$(sqlite3 "$DB" "
+SELECT COUNT(*)
+FROM cards
+WHERE queue = 2
+AND due <= $today;
+")
+
+learning=$(sqlite3 "$DB" "
+SELECT COUNT(*)
+FROM cards
+WHERE queue = 1;
+")
+
+new_cards=$(sqlite3 "$DB" "
+SELECT COUNT(*)
+FROM cards
+WHERE queue = 0;
+")
+
+echo "Cards: $cards"
+echo "Notes: $notes"
+echo "Due Reviews: $due_reviews"
+echo "Learning: $learning"
+echo "New Cards: $new_cards"
+echo "Total Remaining: $((due_reviews + learning + new_cards))"

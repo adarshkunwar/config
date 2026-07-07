@@ -19,10 +19,12 @@ colors
 export CLICOLOR=1
 export LSCOLORS=ExFxBxDxCxegedabagacad
 export FZF_DEFAULT_OPTS="
---color=fg:#e6d3a3,bg:#0f0b05,hl:#f0a020
---color=pointer:#f0a020,marker:#f0a020
+--color=fg:#c8c8c8,bg:#000000
+--color=hl:#ffffff
+--color=pointer:#ffffff
+--color=marker:#ffffff
 "
-export EZA_COLORS="di=38;5;214:ln=38;5;179:ex=38;5;214:pi=38;5;203"
+export EZA_COLORS="di=38;5;250:fi=38;5;245"
 
 
 # ~~~~~~~~~~~~~~~~~~~Environment Variables~~~~~~~~~~~~~~~~~~~~~~
@@ -35,7 +37,6 @@ export TERM="tmux-256color"
 
 # Directories
 export DOTFILES="$HOME/Documents/dotfiles"
-export SCRIPTS="$HOME/projects/scripts"
 
 # Electron flags
 export ELECTRON_FLAGS="$(cat ~/.config/electron/electron-flags.conf | tr '\n' ' ')"
@@ -44,7 +45,7 @@ export ELECTRON_FLAGS="$(cat ~/.config/electron/electron-flags.conf | tr '\n' ' 
 export BAT_THEME="TwoDark"
 
 # grep coloring (amber theme)
-export GREP_COLORS='ms=01;38;5;214:mc=01;38;5;214:sl=38;5;240:cx=:fn=38;5;179:ln=38;5;240:bn=38;5;240:se=38;5;203'
+export GREP_COLORS='ms=01;38;5;255:mc=01;38;5;255:sl=38;5;240:cx=:fn=38;5;250:ln=38;5;240:bn=38;5;240:se=38;5;250'
 
 # Minor tweaks
 setopt autocd beep extendedglob nomatch notify
@@ -74,11 +75,11 @@ promptinit
 export PURE_PROMPT_SYMBOL="❯"
 export PURE_GIT_UNTRACKED_DIRTY=1
 
-zstyle :prompt:pure:path color 214
-zstyle :prompt:pure:git:branch color 179
-zstyle :prompt:pure:git:dirty color 196
-zstyle :prompt:pure:git:clean color 114
-zstyle :prompt:pure:prompt:error color 196
+zstyle :prompt:pure:path color 250
+zstyle :prompt:pure:git:branch color 245
+zstyle :prompt:pure:git:dirty color 160
+zstyle :prompt:pure:git:clean color 250
+zstyle :prompt:pure:prompt:error color 160
 
 prompt pure
 
@@ -88,11 +89,10 @@ prompt pure
 alias v=nvim
 alias cd=z
 
-alias scripts='cd $SCRIPTS'
 alias dot='cd $DOTFILES'
 
 # eza improvements
-alias ls='eza --icons --group-directories-first'
+alias ls='eza --icons=always --color=always --group-directories-first'
 alias ll='eza -lah --icons --group-directories-first'
 alias la='eza -a --icons'
 alias lst='eza --icons --tree --level=3'
@@ -154,7 +154,7 @@ zstyle ':completion:*' matcher-list \
 # Completion UI styling
 zstyle ':completion:*' menu select
 zstyle ':completion:*' group-name ''
-zstyle ':completion:*:descriptions' format '%F{214}-- %d --%f'
+zstyle ':completion:*:descriptions' format '%F{245}-- %d --%f'
 zstyle ':completion:*:warnings' format '%F{196}No matches found%f'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 
@@ -174,16 +174,20 @@ bindkey '^[[B' history-substring-search-down
 # ~~~~~~~~~~~~~~~~~~~Colored man pages~~~~~~~~~~~~~~~~~~~~~~
 
 export LESS_TERMCAP_mb=$'\E[01;31m'
-export LESS_TERMCAP_md=$'\E[01;38;5;214m'
+export LESS_TERMCAP_md=$'\E[01;38;5;255m'
 export LESS_TERMCAP_me=$'\E[0m'
 export LESS_TERMCAP_se=$'\E[0m'
-export LESS_TERMCAP_so=$'\E[38;5;214;48;5;236m'
+export LESS_TERMCAP_so=$'\E[38;5;255;48;5;236m'
 export LESS_TERMCAP_ue=$'\E[0m'
-export LESS_TERMCAP_us=$'\E[04;38;5;179m'
+export LESS_TERMCAP_us=$'\E[04;38;5;250m'
 
 
 # ~~~~~~~~~~~~~~~~~~~Startup Banner~~~~~~~~~~~~~~~~~~~~~~
 
-print -P "%F{214}󰣇  welcome back, Adarsh%f"
+print -P "%F{250}󰣇  welcome back, Adarsh%f"
 print -P "%F{240}$(date '+%A %d %B %H:%M')%f"
 echo
+
+
+# ~~~~~~~~~~~~~~~~~~~ Development ~~~~~~~~~~~~~~~~~~~~~~
+eval "$(fnm env --use-on-cd)"

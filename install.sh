@@ -78,6 +78,8 @@ config_folder=(
   rofi
   dunst
   electron
+  waybar
+  hypr 
 )
 
 # Shell config

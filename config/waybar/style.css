@@ -85,6 +85,17 @@ window#waybar {
   border-radius: 50px;
 }
 
+#custom-anki {
+  color: #c89b3c;
+  padding: 4px 8px;
+  border-radius: 50px;
+}
+
+#custom-anki:hover {
+  background: #1c1c1c;
+  color: #d0d0d0;
+}
+
 /* =========================================
  * Window Title
  * ========================================= */

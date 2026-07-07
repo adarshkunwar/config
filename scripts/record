@@ -1,11 +1,20 @@
 #!/bin/bash
 
-RES=$(xdpyinfo | awk '/dimensions/{print $2}')
+mkdir -p ~/Videos
 OUT="$HOME/Videos/recording-$(date +%F_%H-%M-%S).mkv"
 
-ffmpeg \
--f pipewire -i 0 \
--f pulse -i default \
--c:v libx264 -preset veryfast -crf 23 \
--c:a aac -b:a 192k \
-~/Videos/recording-$(date +%F_%H-%M-%S).mkv
+wf-recorder -f "$OUT"
+
+if [ -f "$OUT" ]; then
+    printf 'copy\nfile://%s' "$OUT" | wl-copy -t x-special/gnome-copied-files
+    echo "Copied as file to clipboard: $OUT"
+    echo "Try pasting into Discord DESKTOP app (Ctrl+V)."
+
+    if command -v nautilus >/dev/null 2>&1; then
+        nautilus --select "$OUT" &
+    elif command -v xdg-open >/dev/null 2>&1; then
+        xdg-open "$(dirname "$OUT")" &
+    fi
+else
+    echo "Recording file not found — wf-recorder may have failed."
+fi
