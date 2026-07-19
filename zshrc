@@ -4,8 +4,10 @@ path=(
   $HOME/bin
   $HOME/.local/bin
   $HOME/.scripts
+  /opt/cuda/bin
   $path
 )
+
 
 typeset -U path
 export PATH
@@ -64,27 +66,6 @@ setopt HIST_IGNORE_DUPS
 setopt SHARE_HISTORY
 
 
-# ~~~~~~~~~~~~~~~~~~~Prompt~~~~~~~~~~~~~~~~~~~~~~
-
-fpath+=($HOME/.zsh/pure)
-
-autoload -U promptinit
-promptinit
-
-# Pure prompt styling
-export PURE_PROMPT_SYMBOL="❯"
-export PURE_GIT_UNTRACKED_DIRTY=1
-
-zstyle :prompt:pure:path color 250
-zstyle :prompt:pure:git:branch color 245
-zstyle :prompt:pure:git:dirty color 160
-zstyle :prompt:pure:git:clean color 250
-zstyle :prompt:pure:prompt:error color 160
-
-prompt pure
-
-
-# ~~~~~~~~~~~~~~~~~~~Alias~~~~~~~~~~~~~~~~~~~~~~
 
 alias v=nvim
 alias cd=z
@@ -191,3 +172,28 @@ echo
 
 # ~~~~~~~~~~~~~~~~~~~ Development ~~~~~~~~~~~~~~~~~~~~~~
 eval "$(fnm env --use-on-cd)"
+
+export LD_LIBRARY_PATH=/opt/cuda/lib64:$LD_LIBRARY_PATH
+
+
+# ~~~~~~~~~~~~~~~~~~~Prompt~~~~~~~~~~~~~~~~~~~~~~
+
+fpath+=($HOME/.zsh/pure)
+
+autoload -U promptinit
+promptinit
+
+# Pure prompt styling
+export PURE_PROMPT_SYMBOL="❯"
+export PURE_GIT_UNTRACKED_DIRTY=1
+
+zstyle :prompt:pure:path color 250
+zstyle :prompt:pure:git:branch color 245
+zstyle :prompt:pure:git:dirty color 160
+zstyle :prompt:pure:git:clean color 250
+zstyle :prompt:pure:prompt:error color 160
+
+prompt pure
+
+
+# ~~~~~~~~~~~~~~~~~~~Alias~~~~~~~~~~~~~~~~~~~~~~
