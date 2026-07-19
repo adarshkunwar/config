@@ -45,3 +45,11 @@ hl.window_rule({
 	size = "320 180",
 	move = "monitor_w*0.82 monitor_h*0.82",
 })
+
+hl.window_rule({
+	name = "discord-workspace",
+	match = {
+		class = "^vesktop$",
+	},
+	workspace = "9 silent",
+})
