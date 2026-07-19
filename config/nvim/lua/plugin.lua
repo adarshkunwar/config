@@ -27,7 +27,7 @@ require('lazy').setup {
   'junegunn/goyo.vim',
 
   --null-ls & prettier
-  'jose-elias-alvarez/null-ls.nvim',
+  'nvimtools/none-ls.nvim',
   'MunifTanjim/prettier.nvim',
 
   -- Dev icon
