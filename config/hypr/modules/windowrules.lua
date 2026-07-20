@@ -53,3 +53,19 @@ hl.window_rule({
 	},
 	workspace = "9 silent",
 })
+
+hl.window_rule({
+	name = "firefox-workspace",
+	match = {
+		class = "^firefox$",
+	},
+	workspace = "2",
+})
+
+hl.window_rule({
+	name = "whatsapp-workspace",
+	match = {
+		class = "^WhatsApp Desktop$",
+	},
+	workspace = "4 silent",
+})
