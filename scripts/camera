@@ -1,0 +1,8 @@
+#!/bin/bash
+
+
+grim -g "$(slurp)" /tmp/test.png
+file /tmp/test.png
+wl-copy < /tmp/test.png
+
+notify-send "Screenshot copied to the clipboard"
