@@ -1,7 +1,7 @@
 return {
   -- backgrounds
   bg = '#000000',
-  bg_alt = '#111111',
+  bg_alt = '#222222',
   bg_accent = '#181818',
 
   -- foregrounds
