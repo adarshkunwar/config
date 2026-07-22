@@ -10,7 +10,7 @@
 
 window#waybar {
   background: transparent;
-  color: #d0d0d0;
+  color: #ebdbb2;
 }
 
 /* =========================================
@@ -19,8 +19,8 @@ window#waybar {
 
 .modules-center,
 .modules-right {
-  background: rgba(16, 16, 16, 0.92);
-  border: 1px solid #262626;
+  background: rgba(40, 40, 40, 0.92);
+  border: 1px solid #504945;
   border-radius: 50px;
   padding: 0 8px;
 }
@@ -36,7 +36,7 @@ window#waybar {
 /* Workspace Buttons */
 
 #workspaces button {
-  color: #444444;
+  color: #665c54;
   background: transparent;
   padding: 2px 2px;
   min-width: 24px;
@@ -51,19 +51,19 @@ window#waybar {
 }
 
 #workspaces button:hover {
-  background: #1c1c1c;
-  color: #888888;
+  background: #3c3836;
+  color: #bdae93;
   box-shadow: none;
 }
 
 #workspaces button.active {
-  color: #c89b3c;
-  background: #1b1406;
-  border: 1px solid #4a3812;
+  color: #fabd2f;
+  background: #32302a;
+  border: 1px solid #d79921;
 }
 
 #workspaces button.urgent {
-  color: #d16969;
+  color: #fb4934;
 }
 
 /* =========================================
@@ -80,20 +80,20 @@ window#waybar {
 #custom-mpd-toggle,
 #custom-mpd-info,
 #window {
-  color: #707070;
+  color: #a89984;
   padding: 4px 8px;
   border-radius: 50px;
 }
 
 #custom-anki {
-  color: #c89b3c;
+  color: #fabd2f;
   padding: 4px 8px;
   border-radius: 50px;
 }
 
 #custom-anki:hover {
-  background: #1c1c1c;
-  color: #d0d0d0;
+  background: #3c3836;
+  color: #ebdbb2;
 }
 
 /* =========================================
@@ -101,7 +101,7 @@ window#waybar {
  * ========================================= */
 
 #window {
-  color: #555555;
+  color: #7c6f64;
   font-size: 11px;
 }
 
@@ -114,7 +114,7 @@ window#waybar {
  * ========================================= */
 
 #clock {
-  color: #d0d0d0;
+  color: #ebdbb2;
 }
 
 /* =========================================
@@ -122,11 +122,11 @@ window#waybar {
  * ========================================= */
 
 #network {
-  color: #a0a0a0;
+  color: #bdae93;
 }
 
 #network.disconnected {
-  color: #d16969;
+  color: #fb4934;
 }
 
 /* =========================================
@@ -134,11 +134,11 @@ window#waybar {
  * ========================================= */
 
 #pulseaudio {
-  color: #a0a0a0;
+  color: #bdae93;
 }
 
 #pulseaudio.muted {
-  color: #555555;
+  color: #665c54;
 }
 
 /* =========================================
@@ -146,7 +146,7 @@ window#waybar {
  * ========================================= */
 
 #backlight {
-  color: #a0a0a0;
+  color: #bdae93;
 }
 
 /* =========================================
@@ -154,24 +154,24 @@ window#waybar {
  * ========================================= */
 
 #battery {
-  color: #a0a0a0;
+  color: #bdae93;
 }
 
 #battery.charging {
-  color: #8fa87f;
+  color: #b8bb26;
 }
 
 #battery.warning:not(.charging) {
-  color: #c8aa6e;
+  color: #fabd2f;
 }
 
 #battery.critical:not(.charging) {
-  color: #d16969;
+  color: #fb4934;
 }
 
 @keyframes blink {
   to {
-    color: #ffffff;
+    color: #fbf1c7;
   }
 }
 
@@ -188,11 +188,11 @@ window#waybar {
  * ========================================= */
 
 #custom-dunst {
-  color: #a0a0a0;
+  color: #bdae93;
 }
 
 #custom-dunst.paused {
-  color: #d16969;
+  color: #fb4934;
 }
 
 /* =========================================
@@ -200,12 +200,12 @@ window#waybar {
  * ========================================= */
 
 #custom-mpd-toggle {
-  color: #c89b3c;
+  color: #fabd2f;
   padding: 4px 6px;
 }
 
 #custom-mpd-info {
-  color: #888888;
+  color: #a89984;
   font-size: 11px;
 }
 
@@ -214,14 +214,14 @@ window#waybar {
  * ========================================= */
 
 #custom-powermenu {
-  color: #c89b3c;
+  color: #fabd2f;
   font-size: 14px;
   padding: 4px 10px;
   margin-right: 2px;
 }
 
 #custom-powermenu:hover {
-  color: #d16969;
+  color: #fb4934;
 }
 
 /* =========================================
@@ -234,8 +234,8 @@ window#waybar {
 #battery:hover,
 #custom-dunst:hover,
 #clock:hover {
-  background: #1c1c1c;
-  color: #d0d0d0;
+  background: #3c3836;
+  color: #ebdbb2;
 }
 
 /* =========================================
@@ -243,11 +243,11 @@ window#waybar {
  * ========================================= */
 
 tooltip {
-  background: #101010;
-  border: 1px solid #262626;
+  background: #282828;
+  border: 1px solid #504945;
   border-radius: 8px;
 }
 
 tooltip label {
-  color: #d0d0d0;
+  color: #ebdbb2;
 }

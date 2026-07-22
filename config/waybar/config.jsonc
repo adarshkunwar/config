@@ -4,9 +4,9 @@
   "height": 34,
 
   "modules-left": ["hyprland/workspaces", "mpd", "custom/anki"],
-  "modules-right": ["custom/dunst", "pulseaudio", "backlight", "network", "battery", "clock"],
+  "modules-center" : ["clock"],
+  "modules-right": ["custom/dunst", "pulseaudio", "backlight", "network", "battery" ],
 
-  "modules-center": [],
 
   "custom/dunst": {
     "exec": "~/.config/polybar/dunstctl.sh",
