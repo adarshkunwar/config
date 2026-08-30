@@ -58,8 +58,8 @@ eval "$(zoxide init zsh)"
 # ~~~~~~~~~~~~~~~~~~~History~~~~~~~~~~~~~~~~~~~~~~
 
 HISTFILE=~/.histfile
-HISTSIZE=1000
-SAVEHIST=1000
+HISTSIZE=100000
+SAVEHIST=100000
 
 setopt HIST_IGNORE_SPACE
 setopt HIST_IGNORE_DUPS
