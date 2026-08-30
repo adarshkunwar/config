@@ -71,6 +71,7 @@ alias v=nvim
 alias cd=z
 
 alias dot='cd $DOTFILES'
+alias lls='~/llama.cpp/build/bin/llama-server'
 
 # eza improvements
 alias ls='eza --icons=always --color=always --group-directories-first'
