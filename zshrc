@@ -38,7 +38,7 @@ export VISUAL="nvim"
 export TERM="tmux-256color"
 
 # Directories
-export DOTFILES="$HOME/Documents/dotfiles"
+export DOTFILES="$HOME/projects/dotfiles/"
 
 # Electron flags
 export ELECTRON_FLAGS="$(cat ~/.config/electron/electron-flags.conf | tr '\n' ' ')"
