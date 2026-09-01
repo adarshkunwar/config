@@ -47,6 +47,18 @@ hl.window_rule({
 })
 
 hl.window_rule({
+	name = "Picture in picture:",
+	match = {
+		class = "",
+		title = "Picture in picture",
+	},
+	float = true,
+	pin = true,
+	size = "320 180",
+	move = "monitor_w*0.82 monitor_h*0.82",
+})
+
+hl.window_rule({
 	name = "discord-workspace",
 	match = {
 		class = "^vesktop$",
