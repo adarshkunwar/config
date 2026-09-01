@@ -5,13 +5,19 @@
 
   "modules-left": ["hyprland/workspaces", "mpd", "custom/anki"],
   "modules-center" : ["clock"],
-  "modules-right": ["custom/dunst", "pulseaudio", "backlight", "network", "battery" ],
+  "modules-right": ["custom/dunst", "custom/bluetooth", "pulseaudio", "backlight", "network", "battery" ],
 
 
   "custom/dunst": {
     "exec": "~/.config/polybar/dunstctl.sh",
     "interval": 1,
     "on-click": "dunstctl set-paused toggle"
+  },
+
+  "custom/bluetooth": {
+    "exec": "~/.config/waybar/scripts/bluetooth.sh",
+    "interval": 1,
+    "on-click": "bluetoothctl disconnect"
   },
 
   "mpd": {

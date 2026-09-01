@@ -33,7 +33,7 @@ WHERE queue = 0;
 
 remaining=$((due_reviews + learning + new_cards))
 
-printf '{"text":"󰠮 %s","tooltip":"Reviews: %s\nLearning: %s\nNew: %s"}\n' \
+printf '{"text":"󰠮 %s","tooltip":"Reviews: %s\\nLearning: %s\\nNew: %s"}\n' \
     "$remaining" \
     "$due_reviews" \
     "$learning" \
