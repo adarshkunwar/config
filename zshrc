@@ -86,7 +86,7 @@ alias grep='grep --color=auto'
 
 alias df='df -h'
 alias du='du -h'
-alias duh='du -h --max-depth=1'
+alias duh='du -ah --max-depth=1 | sort -hr | head -n 20'
 alias free='free -h'
 
 alias g='git'
