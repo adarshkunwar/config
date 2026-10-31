@@ -5,6 +5,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DOTFILES_DIR="$ROOT_DIR/config"
 CONFIG_DIR="$HOME/.config"
 SCRIPTS_DIR="$HOME/.scripts"
+IMAGE_DIR="$HOME/Pictures"
 
 log() {
   printf "\033[1;32m[dotfiles]\033[0m %s\n" "$1"
@@ -110,6 +111,16 @@ for script in "$ROOT_DIR/scripts/"*; do
 
   ln -s "$script" "$target"
   log "Linked script $name -> $target"
+done
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# IMAGES 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+mkdir -p $IMAGE_DIR
+
+for file in "$ROOT_DIR/images"/*; do 
+  [ -e "$file" ] && cp -r "$file" "$IMAGE_DIR"
 done
 
 log "Dotfiles installation complete"
